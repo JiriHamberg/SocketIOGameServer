@@ -1,0 +1,14 @@
+extends layout
+
+block scripts
+	link(rel='stylesheet', href='/stylesheets/hover-popup.css')
+	script(src='/javascripts/equilibrioClient.js')
+
+block content
+	h1= title
+	p(id="statusBar")
+	audio(id="tokenSound", style="{visibility: hidden; position:fixed;}")
+		source(src="/sounds/token.ogg")
+		source(src="/sounds/token.mp3")
+	canvas(id="gameCanvas", width="400", height="400", style="{float:left;}")
+	include chat

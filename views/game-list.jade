@@ -1,0 +1,26 @@
+
+div(id="gameList", class="game-list-container")
+	table(class="game-table")
+		tbody(id="gameContainer", class="game-table-body")
+			tr
+				td Game type
+				td Players
+				td Creator
+				td Description
+				td
+
+p
+	div(id="gameOptions")
+		span Game type
+		select(id="gameTypeSelection")
+			option(value="pong") Pong
+			option(value="equilibrio") Equilibrio
+		br
+		span Allow observers
+		input(type="checkbox", name="allow-observers", checked="checked", id="allowObservers", value="true")
+		br
+		span Game description:
+		br
+		input(id="gameDescription", type="text", maxlength="25")
+		br
+		button(onClick="createGame();") Create a game

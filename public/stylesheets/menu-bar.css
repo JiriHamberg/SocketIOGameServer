@@ -1,0 +1,30 @@
+body {
+	margin-top: 50px;
+}
+
+.menu-bar {
+	position: fixed;
+	display: block;
+	height: 25px;
+	width: 100%;
+	top: 0px;
+	left: 0px;
+	z-index: 100;
+	background-color: #D8D8D8;
+	border-bottom-style: solid;
+	border-bottom-color: #A2A2A2;
+}
+
+.menu-bar div {
+	display: inline;
+	padding-right: 50px;
+	padding-left: 50px;
+}
+
+.menu-bar span {
+	padding-right: 10px;
+}
+
+#nameContainer {
+	font-weight: bold;
+}

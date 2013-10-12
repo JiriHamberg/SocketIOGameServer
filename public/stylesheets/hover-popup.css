@@ -1,0 +1,17 @@
+.hover-popup {
+	
+}
+
+.hover-popup div {
+	display: none;
+}
+
+.hover-popup:hover {
+	
+}
+
+.hover-popup:hover div {
+	display: block;
+	position: absolute;
+	z-index: 10;
+}

@@ -1,0 +1,16 @@
+div(class="chat-container")
+	table(class="chat-table")
+		tbody(class="chat-table-body") 
+			tr(id="chatDisplay")
+				td(class="message-cell")
+					div(id="messageContainer", class="message-container")
+				td
+					div(id="clientContainer", class="client-container")
+			tr
+				td
+					div(class="message-input")
+						input(id="messageInput")
+						button(class="send-button", onClick="sendMessage();")
+							| Send
+						button(id="toggleChat", class="toggle-button", onClick="toggleChat();")
+							| Hide

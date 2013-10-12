@@ -1,0 +1,10 @@
+extends layout
+
+block scripts
+	script(src='/javascripts/pongClient.js')
+
+block content
+	h1= title
+	div(id="score")
+	canvas(id="pong", width="650", height="400")
+	include chat
