@@ -6,9 +6,19 @@ block scripts
 
 block content
 	h1= title
-	p(id="statusBar")
-	audio(id="tokenSound", style="{visibility: hidden; position:fixed;}")
-		source(src="/sounds/token.ogg")
-		source(src="/sounds/token.mp3")
-	canvas(id="gameCanvas", width="400", height="400", style="{float:left;}")
-	include chat
+
+	table
+		tr
+			td(style="padding-right: 100px;")
+				p(id="statusBar")
+				audio(id="tokenSound", style="{visibility: hidden; position:fixed;}")
+					source(src="/sounds/token.ogg")
+					source(src="/sounds/token.mp3")
+				canvas(id="gameCanvas", width="400", height="400")
+			td(style="display: block;")
+				div(style="width:300px;")
+					h3 About the game
+					p
+						| The name Equilibrio and the Equilibrio board art are property of CrazyEttin. For more information about the Equilibrio game visit 
+						<a href="https://sites.google.com/site/crazyettin/equilibrio">Equilibrio community</a>
+			

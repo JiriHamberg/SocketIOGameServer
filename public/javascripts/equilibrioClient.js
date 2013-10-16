@@ -13,13 +13,15 @@ var CHAOS = 3;
 var tokenSoundId = "tokenSound";
 
 var boardModel = {
+	//static data
 	width: 400,
 	height: 400,
-	offSetX: 60,
-	offSetY: 60,
-	gapX: 66.5,
-	gapY: 66.5,
+	offSetX: /*60*/ 67,
+	offSetY: /*60*/ 67.5625,
+	gapX: /*66.5*/ 66.75,
+	gapY: /*66.5*/ 66.5,
 	r: 18,
+	//game state
 	grid: [[],[],[],[],[]],
 	turn: '',
 	token: '',
@@ -27,7 +29,6 @@ var boardModel = {
 	players: [],
 	observers: []
 };
-
 
 function sendMove() {
 	var xInput = document.getElementById(xId);
@@ -78,7 +79,7 @@ socket.on('game data', function (gameData) {
 	boardModel.token = gameData.token;
 	boardModel.players = gameData.players;
 	boardModel.observers = gameData.observers;
-	buildGameView(gameData);
+	buildGameView();
 });
 
 socket.on('game ended', function() {
@@ -91,36 +92,34 @@ socket.on('game ended', function() {
 
 function onCanvasClick(event) {
 	var canvas = document.getElementById(canvasId);
-	var x = event.clientX - canvas.offsetLeft;
-	var y = event.clientY - canvas.offsetTop;
+	var rect = canvas.getBoundingClientRect();
+	var x = event.clientX - rect.left;
+	var y = event.clientY - rect.top; 
 
 	function getClosestPoint(x1, y1){
+		var best = {point: null, distance: 1000};
 	    for(var y=0; y<boardModel.grid.length; y++){
 			for(var x=0; x<boardModel.grid[0].length; x++){
 				var xCircle = boardModel.offSetX + x * boardModel.gapX; 
 				var yCircle = boardModel.offSetY + y * boardModel.gapY;
 				var distance = Math.sqrt(Math.pow(x1-xCircle, 2) + Math.pow(y1 - yCircle, 2));
-				if(distance < boardModel.r) {
-					return [x, y];
+				if(distance < boardModel.r && distance < best.distance) {
+					best.point = [x, y];
+					best.distance = distance;
 				}
 			}
 		}
-		return null;
+		return best.point;
 	}
 
 	var point = getClosestPoint(x, y);
-	//console.log(point);
 
 	if(point !== null) {
 		socket.emit('make move', point);
 	}
 }
 
-function sendData(keyCode, value) {
-//socket.emit('key event', {keyCode: keyCode, value: value});
-}
-
-function buildGameView(gameData) {
+function buildGameView() {
 	document.getElementById(tokenSoundId).play();
 	var turn = "";
 	var token = "";
@@ -136,8 +135,8 @@ function buildGameView(gameData) {
 	document.getElementById(statusBarId).innerHTML = token + turn;
 
 	function drawCircle(x, y, r, color1, color2, context) {
-	    var centerX = x + r / 2.0;
-	    var centerY = y  + r / 2.0;
+	    var centerX = x;
+	    var centerY = y;
 	  	context.beginPath();
 	    context.arc(centerX, centerY, r, 0, 2 * Math.PI, false);
 	    context.fillStyle = color1;
@@ -156,12 +155,12 @@ function buildGameView(gameData) {
 
 	var canvas = document.getElementById(canvasId);
 	var context = canvas.getContext("2d");
-	var grid = gameData.grid;
+	var grid = boardModel.grid;
 
 	context.drawImage(boardImage, 0, 0, boardModel.width, boardModel.height);
 
 	/*if(boardModel.lastMove){
-		drawCircleOnPoint(boardModel.lastMove[0], boardModel.lastMove[1], boardModel.r, 'yellow', 'yellow', context);
+		drawCircleOnPoint(boardModel.lastMove[0], boardModel.lastMove[1], boardModel.r, '#000000', '#000000', context);
 	}*/
 
 	for(var y=0; y<grid.length; y++){
@@ -191,3 +190,6 @@ function getParamByName(name) {
 	return match && decodeURIComponent(match[1].replace(/\+/g, ''));
 }
 
+window.onload = function() {
+	buildGameView();
+}
