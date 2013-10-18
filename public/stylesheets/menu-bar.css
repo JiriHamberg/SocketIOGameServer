@@ -17,8 +17,8 @@ body {
 
 .menu-bar div {
 	display: inline;
-	padding-right: 50px;
-	padding-left: 50px;
+	padding-right: 10px;
+	padding-left: 10px;
 }
 
 .menu-bar span {

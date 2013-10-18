@@ -5,7 +5,7 @@
 
 var express = require('express')
   , routes = require('./routes')
-  , user = require('./routes/user')
+  , gamesController = require('./routes/games')
   , http = require('http')
   , path = require('path')
   ,	cookie = require('cookie')
@@ -43,7 +43,7 @@ var utils = require("./modules/Utils"); //utilities
 var nextGameId = 1; //game id counter
 var nextUserId = 1; //user id counter
 var games = {}; //container for all games
-var fps = 20; //requested frames per second
+var fps = 20; //requested game frames per second
 
 /**
  * Games
@@ -51,17 +51,18 @@ var fps = 20; //requested frames per second
 var pong = require('./games/Pong');
 var equilibrio = require('./games/Equilibrio');
 
-//console.log(pong);
 
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+
 app.get('/', routes.index);
-app.get('/users', user.list);
-//app.get('/game', routes.game);
-app.get('/' + pong.URL, routes.pong);
-app.get('/' + equilibrio.URL, routes.equilibrio);
+app.get('/info', routes.info);
+
+//game routes
+app.get('/' + pong.URL, gamesController.pong);
+app.get('/' + equilibrio.URL, gamesController.equilibrio);
 
 /*
  * Middleware for session initialization

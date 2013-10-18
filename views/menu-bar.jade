@@ -1,8 +1,12 @@
 div(id="menuBar", class="menu-bar")
 	div
-		span You are know as
+		a(href="/") Games
+	div
+		a(href="/info") Info
+	div(style="padding-left: 50px;")
+		span Name:
 		span(id="nameContainer")
 	div
 		input(id="changeNameInput", type="text", maxlength="15")
 		button(id="changeNameButton", onClick="onChangeName();")
-			| Set your name
+			| Set name
