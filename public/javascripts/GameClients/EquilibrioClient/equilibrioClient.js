@@ -3,8 +3,6 @@ var statusBarId = "statusBar";
 
 var boardImage = new Image();
 boardImage.src = '../images/Board.png';
-boardImage.onload = function() {
-};
 
 var SUN = 1;
 var MOON = 2;
@@ -30,47 +28,12 @@ var boardModel = {
 	observers: []
 };
 
-function sendMove() {
-	var xInput = document.getElementById(xId);
-	var yInput = document.getElementById(yId);
-	var x = parseInt(xInput.value);
-	var y = parseInt(yInput.value);
-	socket.emit('make move', [x, y]);
-}
-
-var keys = {};
 var gameId = getParamByName("id");
-var lastUpdate = 0;
-
-//waiting for opponent loop
-var waitingLoop; 
-
 var socket = io.connect();
+var utils = new ClientUtils();
+
 socket.emit('join game', {gameId: gameId});
 
-socket.on('join status', function(status) {
-	var statusBar = document.getElementById(statusBarId);
-	var gameStarted = boardModel.players.length >= 2;
-	if(status === 'ok') {
-		if(!gameStarted) {
-			waitingLoop = setInterval(waitingForOpponent, 250);
-		}	
-	} else if(status === 'reject') {
-		statusBar.innerHTML = "The game you tried to join has already started and does not allow observers";
-	} else if(status === 'not found') {
-		statusBar.innerHTML = "No game exists with given id";
-	}
-
-});
-
-socket.on('game started', function() {
-	gameStarted = true;
-	clearInterval(waitingLoop);
-	var statusBar = document.getElementById(statusBarId);
-	statusBar.innerHTML = '';
-	var canvas = document.getElementById(canvasId);
-	canvas.addEventListener('click', onCanvasClick);
-});
 
 socket.on('game data', function (gameData) {
 	boardModel.grid = gameData.grid;
@@ -81,14 +44,6 @@ socket.on('game data', function (gameData) {
 	boardModel.observers = gameData.observers;
 	buildGameView();
 });
-
-socket.on('game ended', function() {
-	var canvas = document.getElementById(canvasId);
-	var statusBar = document.getElementById(statusBarId);
-	/*canvas.parentNode.removeChild(canvas);*/
-	statusBar.innerHTML = "Game ended because one of the players disconnected";
-});
-
 
 function onCanvasClick(event) {
 	var canvas = document.getElementById(canvasId);
@@ -176,14 +131,6 @@ function buildGameView() {
 	}
 }
 
-function waitingForOpponent() {
-	var statusBar = document.getElementById(statusBarId);
-	var num = Math.floor(new Date().getMilliseconds() / 250); //periodic 0...3
-	var dots = new Array(num + 1).join("."); //hacky repat string
-	statusBar.innerHTML = "Waiting for an opponent";
-	statusBar.innerHTML += dots;
-}
-
 //returns url param of given name
 function getParamByName(name) {
 	var match = RegExp('[?&]' + name +'=([^&]*)').exec(window.location.search);
@@ -192,4 +139,7 @@ function getParamByName(name) {
 
 window.onload = function() {
 	buildGameView();
+	utils.addGameStateManager(socket, $('#statusBar').get(0));
+	var canvas = document.getElementById(canvasId);
+	canvas.addEventListener('click', onCanvasClick);
 }

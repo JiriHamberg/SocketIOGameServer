@@ -118,7 +118,11 @@ io.sockets.on('connection', function(socket) {
       return;
     }
     socket.gameId = id;
-    socket.emit('join status', 'ok');
+    if(games[id].hasStarted){
+      socket.emit('join status', 'started'); 
+    } else {
+      socket.emit('join status', 'waiting');
+    }
     //update game list
     io.sockets.emit('open games', getOpenGames());
   });
