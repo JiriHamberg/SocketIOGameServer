@@ -17,7 +17,7 @@ socket.on('open games', function(gameListData) { //[{id:-- , info: --}, ...]
 socket.on('disconnect', function () {
 	setTimeout(function() {
 		window.location.reload();
-	}, 250);
+	}, 2000);
 });
 
 function renderGameList(gameListData) {
